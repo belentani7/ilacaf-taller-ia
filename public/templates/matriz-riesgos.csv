@@ -1,0 +1,2 @@
+id,riesgo,contexto,impacto_1_5,probabilidad_1_5,control,propietario,evidencia,estado,decision_salida
+EJ-001,Acceso indebido a documentos,Asistente interno ficticio,5,3,Control de acceso en backend,Equipo de seguridad,Test de permisos denegados,Pendiente,No publicar hasta verificar
