@@ -1,9 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import type { Module } from "@/lib/curriculum";
 
 const KEY = "ilacaf-workshop-completed-v1";
+
+function subscribeProgress(notify: () => void) {
+  window.addEventListener("storage", notify);
+  window.addEventListener("ilacaf-progress-changed", notify);
+  return () => {
+    window.removeEventListener("storage", notify);
+    window.removeEventListener("ilacaf-progress-changed", notify);
+  };
+}
+function progressSnapshot(slug: string) {
+  try {
+    const stored: unknown = JSON.parse(window.localStorage.getItem(KEY) || "[]");
+    return Array.isArray(stored) && stored.includes(slug);
+  } catch { return false; }
+}
 
 export default function KnowledgeCheck({
   slug,
@@ -14,19 +29,11 @@ export default function KnowledgeCheck({
 }) {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const saved = useSyncExternalStore(subscribeProgress, () => progressSnapshot(slug), () => false);
   const [storageError, setStorageError] = useState(false);
   const correct = questions.filter((q, index) => answers[index] === q.answer).length;
   const allAnswered = questions.every((_, index) => Number.isInteger(answers[index]));
 
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(window.localStorage.getItem(KEY) || "[]");
-      if (Array.isArray(stored)) setSaved(stored.includes(slug));
-    } catch {
-      setStorageError(true);
-    }
-  }, [slug]);
 
   const submit = () => {
     if (!allAnswered) return;
@@ -36,7 +43,6 @@ export default function KnowledgeCheck({
       const stored: unknown = JSON.parse(window.localStorage.getItem(KEY) || "[]");
       const existing = Array.isArray(stored) ? stored.filter((entry): entry is string => typeof entry === "string") : [];
       window.localStorage.setItem(KEY, JSON.stringify([...new Set([...existing, slug])]));
-      setSaved(true);
       window.dispatchEvent(new Event("ilacaf-progress-changed"));
     } catch {
       setStorageError(true);
