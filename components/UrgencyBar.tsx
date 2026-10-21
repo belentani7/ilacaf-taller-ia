@@ -1,30 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { modules } from "@/lib/curriculum";
 
 const KEY = "ilacaf-workshop-completed-v1";
 
+function subscribeProgress(notify: () => void) {
+  window.addEventListener("storage", notify);
+  window.addEventListener("ilacaf-progress-changed", notify);
+  return () => {
+    window.removeEventListener("storage", notify);
+    window.removeEventListener("ilacaf-progress-changed", notify);
+  };
+}
+
+function progressCount() {
+  try {
+    const stored: unknown = JSON.parse(window.localStorage.getItem(KEY) || "[]");
+    const ids = new Set(Array.isArray(stored) ? stored : []);
+    return modules.filter((unit) => ids.has(unit.slug)).length;
+  } catch { return 0; }
+}
+
+function storageAvailable() {
+  try { window.localStorage.getItem(KEY); return true; } catch { return false; }
+}
+
 export default function UrgencyBar() {
-  const [done, setDone] = useState(0);
-  const [available, setAvailable] = useState(true);
-  useEffect(() => {
-    const refresh = () => {
-      try {
-        const stored: unknown = JSON.parse(localStorage.getItem(KEY) || "[]");
-        const ids = new Set(Array.isArray(stored) ? stored : []);
-        setDone(modules.filter((unit) => ids.has(unit.slug)).length);
-        setAvailable(true);
-      } catch { setAvailable(false); }
-    };
-    refresh();
-    window.addEventListener("storage", refresh);
-    window.addEventListener("ilacaf-progress-changed", refresh);
-    return () => {
-      window.removeEventListener("storage", refresh);
-      window.removeEventListener("ilacaf-progress-changed", refresh);
-    };
-  }, []);
+  const done = useSyncExternalStore(subscribeProgress, progressCount, () => 0);
+  const available = useSyncExternalStore(subscribeProgress, storageAvailable, () => true);
+
   const percent = Math.round((done / modules.length) * 100);
 
   return (
