@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ILACAF · Formación profesional en inteligencia artificial
 
-## Getting Started
+Sitio Next.js de formación para profesionales de auditoría, derecho y finanzas.
 
-First, run the development server:
+## Producto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Portada con identidad visual propia, temario, metodología, FAQ y enlaces internos.
+- Biblioteca en `/curso` con **9 lecciones completas** (3 bloques), ejemplos inventados, actividades y prompts reutilizables.
+- Laboratorio interactivo de cinco situaciones con explicaciones y puntuación calculada en el navegador.
+- Adaptación a móvil, navegación por teclado, semántica HTML y enlaces de salto.
+- Sin backend de estudiantes ni inscripción ficticia. El curso no presenta fechas, cupos, certificados ni precios no confirmados.
+- El contenido no constituye asesoramiento jurídico, financiero ni de auditoría.
+
+## Ejecutar
+
+Requisitos: Node.js compatible con Next.js 16.
+
+```sh
+npm install
+npm run lint
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Desarrollo: `npm run dev`. Rutas: `/` y `/curso`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Principios del material
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Los ejercicios utilizan ejemplos inventados. Evita enviar datos privados o sujetos a secreto profesional a servicios externos; comprueba toda referencia normativa y cálculo en sus fuentes originales. La aplicación no guarda respuestas del laboratorio ni contiene autenticación.
 
-## Learn More
+## Publicación
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Antes de desplegar, confirma dominio, convocatoria y datos de contacto con el titular. No inventes disponibilidad ni añadas formularios que simulen una inscripción sin almacenamiento y tratamiento reales.
