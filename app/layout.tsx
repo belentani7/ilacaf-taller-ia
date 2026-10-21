@@ -1,42 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "IA para Profesionales | Taller ILACAF — Sep 23, 24 y 25",
-  description:
-    "Taller intensivo de Inteligencia Artificial para profesionales de Auditoría, Derecho y Finanzas. Fernando Pérez Tapia — Instructor Principal. Cupos limitados.",
-  keywords: [
-    "IA",
-    "inteligencia artificial",
-    "taller",
-    "ILACAF",
-    "auditoría forense",
-    "compliance",
-    "finanzas",
-    "Fernando Pérez Tapia",
-  ],
+  title: {
+    default: "ILACAF — IA para Profesionales",
+    template: "%s",
+  },
+  description: "Aula abierta: seis unidades con teoría, casos, ejercicios y evaluaciones de inteligencia artificial aplicada a auditoría, derecho y finanzas.",
+  robots: { index: true, follow: true },
+  keywords: ["ILACAF", "inteligencia artificial", "formación profesional", "auditoría", "derecho", "finanzas", "gobierno de IA"],
+  openGraph: {
+    title: "ILACAF — IA para Profesionales",
+    description: "Aprende, verifica y aplica IA con criterio profesional. Programa didáctico abierto.",
+    type: "website",
+    locale: "es_ES",
+  },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
   return (
-    <html
-      lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-50">
-        {children}
-      </body>
+    <html lang="es">
+      <body className="min-h-screen bg-[#070d16] font-sans text-slate-100 antialiased">{children}</body>
     </html>
   );
 }
