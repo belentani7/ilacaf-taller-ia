@@ -18,7 +18,7 @@ export default function Hero() {
           transition={{ duration: 0.7 }}
         >
           <span className="px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-sm font-medium mb-6 inline-block">
-            Septiembre 23, 24 y 25 — Cupos Limitados
+            Formación abierta · Sin convocatoria anunciada
           </span>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">
             Inteligencia Artificial <br />{" "}
@@ -31,13 +31,13 @@ export default function Hero() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="#inscripcion"
+              href="/curso"
               className="px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-lg transition-all shadow-lg shadow-blue-600/25 text-center"
             >
-              Asegurar mi cupo ahora
+              Empezar el curso
             </a>
             <a
-              href="#temario"
+              href="/#programa"
               className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-lg backdrop-blur-sm transition-all text-center"
             >
               Ver temario completo
