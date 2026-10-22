@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IA para Profesionales | Taller ILACAF — Sep 23, 24 y 25",
+  title: "ILACAF | Formación práctica en IA para profesionales",
   description:
-    "Taller intensivo de Inteligencia Artificial para profesionales de Auditoría, Derecho y Finanzas. Fernando Pérez Tapia — Instructor Principal. Cupos limitados.",
+    "Aprende inteligencia artificial aplicada a auditoría, derecho y finanzas: nueve lecciones, casos ficticios y laboratorio interactivo, sin registro.",
   keywords: [
     "IA",
     "inteligencia artificial",
