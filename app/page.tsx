@@ -19,6 +19,7 @@ export default function Home() {
           <div className="flex items-center gap-5 text-xs font-semibold text-slate-300">
             <a href="#temario" className="hidden hover:text-white sm:block">Programa</a>
             <a href="#metodo" className="hidden hover:text-white sm:block">Método</a>
+            <Link href="/curso" className="hidden text-cyan-200 hover:text-white sm:block">9 lecciones + laboratorio</Link>
             <Link href="/recursos" className="rounded-lg border border-cyan-300/35 px-3 py-2.5 text-cyan-200 hover:bg-cyan-200/10">Recursos ↗</Link>
           </div>
         </div>
@@ -47,6 +48,17 @@ export default function Home() {
               </li>
             ))}
           </ol>
+        </section>
+        <section aria-labelledby="laboratorio-complementario" className="mx-auto max-w-6xl px-6 pb-20">
+          <div className="rounded-3xl border border-cyan-300/25 bg-gradient-to-br from-[#12283c] to-[#080f19] p-8 sm:p-12">
+            <p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-300">Práctica complementaria / Casos profesionales</p>
+            <h2 id="laboratorio-complementario" className="mt-5 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">Nueve lecciones aplicadas y un laboratorio de cinco decisiones.</h2>
+            <p className="mt-5 max-w-3xl text-sm leading-8 text-slate-300">Amplía los seis módulos principales con tres recorridos específicos de auditoría, derecho y finanzas, situaciones ficticias y explicaciones inmediatas. Las respuestas del laboratorio no se envían a ningún servidor.</p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link href="/curso" className="rounded-lg bg-cyan-200 px-5 py-3 font-semibold text-slate-950 hover:bg-white">Abrir lecciones ↗</Link>
+              <Link href="/curso#laboratorio" className="rounded-lg border border-white/25 px-5 py-3 font-semibold text-white hover:bg-white/10">Practicar decisiones ↗</Link>
+            </div>
+          </div>
         </section>
         <section id="metodo" className="border-y border-white/10 bg-[#0d1622] py-20" aria-labelledby="metodo-title">
           <div className="mx-auto max-w-6xl px-6">

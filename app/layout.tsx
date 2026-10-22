@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     default: "ILACAF — IA para Profesionales",
     template: "%s",
   },
-  description: "Aula abierta: seis unidades con teoría, casos, ejercicios y evaluaciones de inteligencia artificial aplicada a auditoría, derecho y finanzas.",
+  description: "Aula abierta: seis módulos de estudio, nueve lecciones complementarias y laboratorio interactivo de cinco casos sobre inteligencia artificial aplicada a auditoría, derecho y finanzas.",
   robots: { index: true, follow: true },
   keywords: ["ILACAF", "inteligencia artificial", "formación profesional", "auditoría", "derecho", "finanzas", "gobierno de IA"],
   openGraph: {

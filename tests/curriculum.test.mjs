@@ -77,3 +77,20 @@ test("misleading scarcity and expired dates are absent from published entrypoint
   assert.match(home, /lib\/curriculum/);
   assert.match(progress, /localStorage/);
 });
+
+test("additional practical course preserves both programs and functional five-scenario quiz", () => {
+  for (const p of ["app/curso/page.tsx", "components/PracticeLab.tsx"]) {
+    assert.ok(existsSync(resolve(root,p)),p);
+  }
+  const course = readFileSync(resolve(root,"app/curso/page.tsx"),"utf8");
+  const lab = readFileSync(resolve(root,"components/PracticeLab.tsx"),"utf8");
+  const homepage = readFileSync(resolve(root,"app/page.tsx"),"utf8");
+  assert.equal((course.match(/lessons:\s*\[/g) || []).length,3);
+  assert.equal((course.match(/theory:\s*"/g) || []).length,9);
+  assert.equal((lab.match(/question:\s*"/g) || []).length,5);
+  assert.match(course, /<PracticeLab\s*\/>/);
+  assert.match(homepage, /href="\/curso"/);
+  assert.match(homepage, /href="\/programa\/\$\{module\.slug\}"/);
+  assert.match(lab, /disabled=\{!completed\}/);
+  assert.match(lab, /no emite certificaciones/);
+});
