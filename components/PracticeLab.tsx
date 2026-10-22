@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { buildLabFeedback } from "./lab-export.mjs";
 
 const questions = [
   {
@@ -61,6 +62,22 @@ export default function PracticeLab() {
   const completed = Object.keys(answers).length === questions.length;
   const score = questions.filter((q, i) => answers[i] === q.correct).length;
 
+  function downloadFeedback() {
+    if (!submitted || !completed) return;
+    const content = buildLabFeedback(questions, answers);
+    const url = URL.createObjectURL(new Blob([content], { type: "text/markdown;charset=utf-8" }));
+    try {
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "ilacaf-laboratorio-resultados.md";
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
   function choose(question: number, answer: number) {
     setAnswers((prev) => ({ ...prev, [question]: answer }));
     setSubmitted(false);
@@ -103,6 +120,11 @@ export default function PracticeLab() {
           <button type="button" onClick={() => { setAnswers({}); setSubmitted(false); }} className="rounded-xl border border-white/20 px-6 py-3 text-sm text-slate-200 hover:bg-white/10">Repetir ejercicio</button>
           {!completed && <span className="text-sm text-slate-400">{Object.keys(answers).length} de {questions.length} respondidas</span>}
         </div>
+        {submitted && (
+          <button type="button" onClick={downloadFeedback} className="rounded-xl border border-cyan-300/50 px-6 py-3 text-sm font-semibold text-cyan-100 hover:bg-cyan-300/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-200">
+            Descargar respuestas y explicaciones (.md)
+          </button>
+        )}
         {submitted && (
           <div aria-live="polite" role="status" className="rounded-xl border border-cyan-300/20 bg-slate-950/70 p-5">
             <p className="text-2xl font-semibold text-white">Resultado: {score} / {questions.length}</p>

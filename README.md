@@ -6,7 +6,7 @@ Sitio Next.js de formación para profesionales de auditoría, derecho y finanzas
 
 - Portada con identidad visual propia, temario, metodología, FAQ y enlaces internos.
 - Biblioteca en `/curso` con **9 lecciones completas** (3 bloques), ejemplos inventados, actividades y prompts reutilizables.
-- Laboratorio interactivo de cinco situaciones con explicaciones y puntuación calculada en el navegador.
+- Laboratorio interactivo de cinco situaciones con explicaciones y puntuación calculada en el navegador. Tras corregir el cuestionario, puedes descargar un informe Markdown individual con tus respuestas, soluciones y explicaciones, generado localmente sin datos personales.
 - Adaptación a móvil, navegación por teclado, semántica HTML y enlaces de salto.
 - Sin backend de estudiantes ni inscripción ficticia. El curso no presenta fechas, cupos, certificados ni precios no confirmados.
 - El contenido no constituye asesoramiento jurídico, financiero ni de auditoría.
