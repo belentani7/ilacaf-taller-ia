@@ -90,7 +90,7 @@ test("additional practical course preserves both programs and functional five-sc
   assert.equal((lab.match(/question:\s*"/g) || []).length,5);
   assert.match(course, /<PracticeLab\s*\/>/);
   assert.match(homepage, /href="\/curso"/);
-  assert.match(homepage, /href="\/programa\/\$\{module\.slug\}"/);
+  assert.ok(homepage.includes('href={`/programa/${module.slug}`}'));
   assert.match(lab, /disabled=\{!completed\}/);
   assert.match(lab, /no emite certificaciones/);
 });
