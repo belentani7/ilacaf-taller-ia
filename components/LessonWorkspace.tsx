@@ -23,30 +23,33 @@ export default function LessonWorkspace({ id, title }: { id: string; title: stri
   const [confirmClear, setConfirmClear] = useState(false);
 
   useEffect(() => {
-    setReady(false);
-    try {
-      setProgress(reviveLessonProgress(window.localStorage.getItem(storageKey)));
-    } catch {
-      setProgress(EMPTY);
-    }
-    setReady(true);
+    // Read only after hydration. A deferred read avoids server/client markup
+    // mismatches and keeps the first paint usable on a slow device.
+    const timer = window.setTimeout(() => {
+      try {
+        setProgress(reviveLessonProgress(window.localStorage.getItem(storageKey)));
+      } catch {
+        setProgress({ ...EMPTY });
+        setSaveStatus("El almacenamiento local no está disponible.");
+      }
+      setReady(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [storageKey]);
 
-  useEffect(() => {
-    if (!ready) return;
+  const save = (next: LessonProgress) => {
+    setProgress(next);
     try {
-      // Removing empty entries also lets users clear data without leaving
-      // an unnecessary history of exercise IDs in localStorage.
-      if (!progress.notes.trim() && !progress.completed) {
+      if (!next.notes.trim() && !next.completed) {
         window.localStorage.removeItem(storageKey);
       } else {
-        window.localStorage.setItem(storageKey, JSON.stringify(progress));
+        window.localStorage.setItem(storageKey, JSON.stringify(next));
       }
       setSaveStatus("Guardado en este navegador");
     } catch {
       setSaveStatus("No se pudo guardar. Exporta tus notas antes de cerrar.");
     }
-  }, [progress, ready, storageKey]);
+  };
 
   const exportNotes = () => {
     const text = `ILACAF · Notas personales\nLección: ${title}\nEstado: ${progress.completed ? "Revisada" : "Pendiente"}\n\n${progress.notes}\n`;
@@ -88,7 +91,7 @@ export default function LessonWorkspace({ id, title }: { id: string; title: stri
         disabled={!ready}
         onChange={(event) => {
           setConfirmClear(false);
-          setProgress((old) => ({ ...old, notes: event.target.value }));
+          save({ ...progress, notes: event.target.value });
         }}
         placeholder="Escribe el razonamiento, la evidencia que falta y tu siguiente comprobación..."
         className="mt-2 w-full resize-y rounded-xl border border-white/20 bg-slate-900 p-3 text-sm leading-6 text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
@@ -99,7 +102,7 @@ export default function LessonWorkspace({ id, title }: { id: string; title: stri
           type="checkbox"
           checked={progress.completed}
           disabled={!ready}
-          onChange={(event) => setProgress((old) => ({ ...old, completed: event.target.checked }))}
+          onChange={(event) => save({ ...progress, completed: event.target.checked })}
           className="h-4 w-4 accent-cyan-300"
         />
         He revisado esta lección y sus comprobaciones
@@ -117,7 +120,7 @@ export default function LessonWorkspace({ id, title }: { id: string; title: stri
           <>
             <button
               type="button"
-              onClick={() => { setProgress(EMPTY); setConfirmClear(false); }}
+              onClick={() => { save({ ...EMPTY }); setConfirmClear(false); }}
               className="rounded-lg border border-amber-300/50 px-4 py-2 text-sm text-amber-200 hover:bg-amber-300/10"
             >
               Confirmar borrado
