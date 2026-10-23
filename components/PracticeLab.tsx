@@ -61,6 +61,31 @@ export default function PracticeLab() {
   const completed = Object.keys(answers).length === questions.length;
   const score = questions.filter((q, i) => answers[i] === q.correct).length;
 
+  function downloadFeedback() {
+    if (!submitted || !completed) return;
+    // Generate a local-only report; no analytics or external transfer.
+    const rows = questions.map((q, index) =>
+      [`${index + 1}. ${q.question}`,
+       `Respuesta: ${q.answers[answers[index]]}`,
+       `Resultado: ${answers[index] === q.correct ? "Correcto" : "Para revisar"}`,
+       q.explanation].join("\n")
+    );
+    const report = [
+      "ILACAF · Laboratorio de práctica profesional",
+      `Resultado: ${score} / ${questions.length}`,
+      "Evaluación formativa sin certificación.",
+      ...rows,
+    ].join("\n\n");
+    const url = URL.createObjectURL(new Blob([report], { type: "text/plain;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "ilacaf-resultados-practica.txt";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   function choose(question: number, answer: number) {
     setAnswers((prev) => ({ ...prev, [question]: answer }));
     setSubmitted(false);
@@ -101,6 +126,7 @@ export default function PracticeLab() {
         <div className="flex flex-wrap items-center gap-4 border-t border-white/10 pt-7">
           <button type="submit" disabled={!completed} className="rounded-xl bg-cyan-300 px-6 py-3 font-semibold text-slate-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40">Comprobar respuestas</button>
           <button type="button" onClick={() => { setAnswers({}); setSubmitted(false); }} className="rounded-xl border border-white/20 px-6 py-3 text-sm text-slate-200 hover:bg-white/10">Repetir ejercicio</button>
+          {submitted && <button type="button" onClick={downloadFeedback} className="rounded-xl border border-cyan-300/40 px-6 py-3 text-sm text-cyan-100 hover:bg-white/10">Descargar explicación (TXT)</button>}
           {!completed && <span className="text-sm text-slate-400">{Object.keys(answers).length} de {questions.length} respondidas</span>}
         </div>
         {submitted && (
