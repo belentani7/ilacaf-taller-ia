@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ClipboardList, FileCheck2, ShieldCheck } from "lucide-react";
 import PracticeLab from "../../components/PracticeLab";
+import LessonWorkspace from "../../components/LessonWorkspace";
 
 const modules = [
   {
@@ -155,6 +156,7 @@ export default function CoursePage() {
                           <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">Prompt de trabajo</h4>
                           <p className="mt-3 whitespace-pre-wrap font-mono text-sm leading-7 text-slate-200">{lesson.prompt}</p>
                         </div>
+                        <LessonWorkspace id={`${module.number}-${i + 1}`} title={`${module.title} · ${lesson.title}`} />
                       </div>
                     </div>
                   </article>
