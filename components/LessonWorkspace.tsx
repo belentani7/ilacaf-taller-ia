@@ -2,31 +2,21 @@
 
 import { useEffect, useState } from "react";
 
-type LessonProgress = { notes: string; completed: boolean };
-const EMPTY: LessonProgress = { notes: "", completed: false };
-const MAX_NOTES = 12000;
+import {
+  EMPTY_LESSON_PROGRESS as EMPTY,
+  MAX_NOTES,
+  lessonStorageKey,
+  reviveLessonProgress,
+} from "../lib/lessonProgress.mjs";
 
-function reviveProgress(raw: string | null): LessonProgress {
-  if (!raw) return EMPTY;
-  try {
-    const value: unknown = JSON.parse(raw);
-    if (typeof value !== "object" || value === null || Array.isArray(value)) return EMPTY;
-    const parsed = value as Record<string, unknown>;
-    return {
-      notes: typeof parsed.notes === "string" ? parsed.notes.slice(0, MAX_NOTES) : "",
-      completed: parsed.completed === true,
-    };
-  } catch {
-    return EMPTY;
-  }
-}
+type LessonProgress = { notes: string; completed: boolean };
 
 /**
  * Each lesson has its own opt-in, browser-only workspace. Do not synchronize
  * notes to a server or log them: they may contain sensitive professional work.
  */
 export default function LessonWorkspace({ id, title }: { id: string; title: string }) {
-  const storageKey = `ilacaf-lesson-v1:${id}`;
+  const storageKey = lessonStorageKey(id);
   const [progress, setProgress] = useState<LessonProgress>(EMPTY);
   const [ready, setReady] = useState(false);
   const [saveStatus, setSaveStatus] = useState("Preparando espacio personal…");
@@ -35,7 +25,7 @@ export default function LessonWorkspace({ id, title }: { id: string; title: stri
   useEffect(() => {
     setReady(false);
     try {
-      setProgress(reviveProgress(window.localStorage.getItem(storageKey)));
+      setProgress(reviveLessonProgress(window.localStorage.getItem(storageKey)));
     } catch {
       setProgress(EMPTY);
     }
