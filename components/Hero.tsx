@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -30,18 +31,18 @@ export default function Hero() {
             digital con IA.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/curso"
+            <Link
+                            href="/curso"
               className="px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-lg transition-all shadow-lg shadow-blue-600/25 text-center"
             >
               Empezar el curso
-            </a>
-            <a
-              href="/#programa"
+            </Link>
+            <Link
+                            href="/#programa"
               className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-lg backdrop-blur-sm transition-all text-center"
             >
               Ver temario completo
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>

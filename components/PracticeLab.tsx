@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { buildLabFeedback } from "./lab-feedback.mjs";
 
 const questions = [
   {
@@ -58,8 +59,24 @@ const questions = [
 export default function PracticeLab() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
-  const completed = Object.keys(answers).length === questions.length;
+  const completed = questions.every((q, i) => Number.isInteger(answers[i]) && answers[i] >= 0 && answers[i] < q.answers.length);
   const score = questions.filter((q, i) => answers[i] === q.correct).length;
+
+  function downloadFeedback() {
+    if (!submitted || !completed) return;
+    const report = buildLabFeedback(questions, answers);
+    const url = URL.createObjectURL(new Blob([report], { type: "text/plain;charset=utf-8" }));
+    const link = document.createElement("a");
+    try {
+      link.href = url;
+      link.download = "ilacaf-resultados-practica.txt";
+      document.body.appendChild(link);
+      link.click();
+    } finally {
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
 
   function choose(question: number, answer: number) {
     setAnswers((prev) => ({ ...prev, [question]: answer }));
@@ -101,6 +118,7 @@ export default function PracticeLab() {
         <div className="flex flex-wrap items-center gap-4 border-t border-white/10 pt-7">
           <button type="submit" disabled={!completed} className="rounded-xl bg-cyan-300 px-6 py-3 font-semibold text-slate-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40">Comprobar respuestas</button>
           <button type="button" onClick={() => { setAnswers({}); setSubmitted(false); }} className="rounded-xl border border-white/20 px-6 py-3 text-sm text-slate-200 hover:bg-white/10">Repetir ejercicio</button>
+          {submitted && <button type="button" onClick={downloadFeedback} className="rounded-xl border border-cyan-300/40 px-6 py-3 text-sm text-cyan-100 hover:bg-white/10">Descargar explicación (TXT)</button>}
           {!completed && <span className="text-sm text-slate-400">{Object.keys(answers).length} de {questions.length} respondidas</span>}
         </div>
         {submitted && (
