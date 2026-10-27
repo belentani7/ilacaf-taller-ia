@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { buildLabFeedback } from "./lab-feedback.mjs";
 
 const questions = [
   {
@@ -58,32 +59,23 @@ const questions = [
 export default function PracticeLab() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
-  const completed = Object.keys(answers).length === questions.length;
+  const completed = questions.every((q, i) => Number.isInteger(answers[i]) && answers[i] >= 0 && answers[i] < q.answers.length);
   const score = questions.filter((q, i) => answers[i] === q.correct).length;
 
   function downloadFeedback() {
     if (!submitted || !completed) return;
-    // Generate a local-only report; no analytics or external transfer.
-    const rows = questions.map((q, index) =>
-      [`${index + 1}. ${q.question}`,
-       `Respuesta: ${q.answers[answers[index]]}`,
-       `Resultado: ${answers[index] === q.correct ? "Correcto" : "Para revisar"}`,
-       q.explanation].join("\n")
-    );
-    const report = [
-      "ILACAF · Laboratorio de práctica profesional",
-      `Resultado: ${score} / ${questions.length}`,
-      "Evaluación formativa sin certificación.",
-      ...rows,
-    ].join("\n\n");
+    const report = buildLabFeedback(questions, answers);
     const url = URL.createObjectURL(new Blob([report], { type: "text/plain;charset=utf-8" }));
     const link = document.createElement("a");
-    link.href = url;
-    link.download = "ilacaf-resultados-practica.txt";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    try {
+      link.href = url;
+      link.download = "ilacaf-resultados-practica.txt";
+      document.body.appendChild(link);
+      link.click();
+    } finally {
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
   }
 
   function choose(question: number, answer: number) {
